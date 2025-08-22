@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Sound Bit szimulátor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 26px;
+    }
+
+    .container {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    input[type="range"] {
+      width: 300px;
+    }
+
+    .bars {
+      display: flex;
+      gap: 6px;
+      height: 120px;
+      align-items: flex-end;
+    }
+
+    .bar {
+      width: 20px;
+      background: #90caf9;
+      border-radius: 4px;
+      transition: height 0.2s, background 0.2s;
+    }
+
+    .bar.active {
+      background: #1976d2;
+    }
+
+    #value {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sound Bit szimulátor</h1>
+  <p>Használd a csúszkát a hangerő beállításához (0–255).</p>
+
+  <div class="container">
+    <input type="range" min="0" max="255" value="0" id="soundSlider" oninput="updateSound()">
+    <span id="value">Hangerő: 0</span>
+
+    <div class="bars" id="bars">
+      <!-- Oszlopok generálva JS-ben -->
+    </div>
+  </div>
+
+  <script>
+    const barsContainer = document.getElementById("bars");
+    const barCount = 10;
+    const bars = [];
+
+    // 10 oszlop létrehozása
+    for (let i = 0; i < barCount; i++) {
+      const bar = document.createElement("div");
+      bar.classList.add("bar");
+      barsContainer.appendChild(bar);
+      bars.push(bar);
+    }
+
+    function updateSound() {
+      const value = document.getElementById("soundSlider").value;
+      document.getElementById("value").innerText = "Hangerő: " + value;
+
+      // max hangerő -> mind a 10 oszlop aktív
+      const activeBars = Math.round((value / 255) * barCount);
+
+      bars.forEach((bar, index) => {
+        if (index < activeBars) {
+          bar.style.height = (10 * (index + 1)) + "px";
+          bar.classList.add("active");
+        } else {
+          bar.style.height = "5px";
+          bar.classList.remove("active");
+        }
+      });
+    }
+
+    updateSound(); // induláskor is frissítsük
+  </script>
+</body>
+</html>
